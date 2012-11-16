@@ -44,7 +44,12 @@ class MixPanelTrackError(Exception):
 @task
 def db_metric_task(slug, num=1, **kwargs):
     met = Metric.objects.get(slug=slug)
-    MetricItem.objects.create(metric=met, num=num)
+    content_object = kwargs.get('content_object')
+    if content_object:
+        MetricItem.objects.create(metric=met, num=num,
+                                  content_object=content_object)
+    else:
+        MetricItem.objects.create(metric=met, num=num)
 
 
 @task

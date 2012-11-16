@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.db import models, IntegrityError
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 
 
 class Metric(models.Model):
@@ -53,6 +55,9 @@ class MetricItem(models.Model):
     metric = models.ForeignKey(Metric, verbose_name=_('metric'))
     num = models.IntegerField(_('number'), default=1)
     created = models.DateTimeField(_('created'), default=datetime.datetime.now)
+    content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    content_object = generic.GenericForeignKey()
 
     class Meta:
         verbose_name = _('metric item')
